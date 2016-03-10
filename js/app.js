@@ -31,7 +31,7 @@ $(document).ready(function () {
     }
 
     //Validates number, otherwise "Not A Number"
-    function validation(guessNumber) {
+    function validation(guessedNumber) {
         //console.log("Guessed Number: " + guessedNumber);
 
         //make sure it is a number rather than not a number
@@ -50,12 +50,24 @@ $(document).ready(function () {
             return false; //prevents from looping and doing anything else
         }
 
-        //if the number of counter guesses is smaller than 0 it ends the game
-        if (counter <= 0) {
-            $('#feedback').text('Game Over!');
-            document.getElementById("userGuess").disabled = true;
-            document.getElementbyId("guessButton").disabled = true;
-            alert('The secret number was ' + secretNumber + '! Better luck next time!');
+        //else the guessNumber is valid
+        else {
+            guessFeedback(secretNumber, guessedNumber);
+            counter--;
+            //update guess history
+            guessHistory(guessedNumber);
+            //update number of guesses
+            showGuessCounter(counter);
+            //reset the guess value to 0
+            $('#userGuess').val('');
+
+            //if the number of counter guesses is smaller than 0 it ends the game
+            if (counter <= 0) {
+                $('#feedback').text('Game Over!');
+                document.getElementById("userGuess").disabled = true;
+                document.getElementById("guessButton").disabled = true;
+                alert('The secret number was ' + secretNumber + '! Better luck next time!');
+            }
         }
     }
 
@@ -76,7 +88,7 @@ $(document).ready(function () {
         } else {
             $('#feedback').text('You got it! Well done!');
             document.getElementById("userGuess").disabled = true;
-            document.getElementbyId("guessButton").disabled = true;
+            document.getElementById("guessButton").disabled = true;
         }
     }
 
@@ -109,7 +121,7 @@ $(document).ready(function () {
         validation(guessedNumber);
 
         //if the user has more than 1 guess in the guess history
-        if ((oldGuess! == 0) && (guessedNumber >= 1) && (guessedNumber <= 100)) {
+        if ((oldGuess !== 0) && (guessedNumber >= 1) && (guessedNumber <= 100)) {
             //caller for relative feedback function defined above
             relativeFeedback(secretNumber, oldGuess, newGuess);
         }
@@ -137,13 +149,13 @@ $(document).ready(function () {
     });
 
     /*--- Display information modal box ---*/
-    $(".what").click(function () {
-        $(".overlay").fadeIn(1000);
+    $('.what').click(function () {
+        $('.overlay').fadeIn(1000);
 
     });
 
     /*--- Hide information modal box ---*/
-    $("a.close").click(function () {
-        $(".overlay").fadeOut(1000);
+    $('a.close').click(function () {
+        $('.overlay').fadeOut(1000);
     });
 });
